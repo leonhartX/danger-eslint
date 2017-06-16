@@ -1,0 +1,17 @@
+[{
+  "filePath": "danger-eslint/spec/fixtures/javascript/warning.js",
+  "messages": [{
+    "ruleId": "no-unused-vars",
+    "severity": 2,
+    "message": "'a' is assigned a value but never used.",
+    "line": 1,
+    "column": 5,
+    "nodeType": "Identifier",
+    "source": "var a = 1;"
+  }],
+  "errorCount": 1,
+  "warningCount": 0,
+  "fixableErrorCount": 0,
+  "fixableWarningCount": 0,
+  "source": "var a = 1;"
+}]

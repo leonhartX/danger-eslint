@@ -1,0 +1,17 @@
+[{
+  "filePath": "danger-eslint/spec/fixtures/javascript/ignored.js",
+  "messages": [{
+    "ruleId": "no-undef",
+    "severity": 1,
+    "message": "'a' is not defined.",
+    "line": 1,
+    "column": 1,
+    "nodeType": "Identifier",
+    "source": "a = 1;"
+  }],
+  "errorCount": 0,
+  "warningCount": 1,
+  "fixableErrorCount": 0,
+  "fixableWarningCount": 0,
+  "source": "a = 1;"
+}]

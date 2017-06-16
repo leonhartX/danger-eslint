@@ -1,0 +1,12 @@
+[{
+  "filePath": "/Users/01011775/Work/danger-eslint/spec/fixtures/javascript/ignored.js",
+  "messages": [{
+    "fatal": false,
+    "severity": 1,
+    "message": "File ignored because of a matching ignore pattern. Use \"--no-ignore\" to override."
+  }],
+  "errorCount": 0,
+  "warningCount": 1,
+  "fixableErrorCount": 0,
+  "fixableWarningCount": 0
+}]

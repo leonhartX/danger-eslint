@@ -6,11 +6,11 @@ require 'eslint/gem_version.rb'
 Gem::Specification.new do |spec|
   spec.name          = 'danger-eslint'
   spec.version       = Eslint::VERSION
-  spec.authors       = ['Ke Xu']
+  spec.authors       = ['leonhartX']
   spec.email         = ['leonhartx.k@gmail.com']
   spec.description   = %q{A short description of danger-eslint.}
   spec.summary       = %q{A longer description of danger-eslint.}
-  spec.homepage      = 'https://github.com/Ke Xu/danger-eslint'
+  spec.homepage      = 'https://github.com/leonhartX/danger-eslint'
   spec.license       = 'MIT'
 
   spec.files         = `git ls-files`.split($/)

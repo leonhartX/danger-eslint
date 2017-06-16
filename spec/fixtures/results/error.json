@@ -1,0 +1,17 @@
+[{
+  "filePath": "danger-eslint/spec/fixtures/javascript/error.js",
+  "messages": [{
+    "ruleId": null,
+    "fatal": true,
+    "severity": 2,
+    "source": "var a = ;",
+    "message": "Parsing error: Unexpected token ;",
+    "line": 1,
+    "column": 9
+  }],
+  "errorCount": 1,
+  "warningCount": 0,
+  "fixableErrorCount": 0,
+  "fixableWarningCount": 0,
+  "source": "var a = ;"
+}]
