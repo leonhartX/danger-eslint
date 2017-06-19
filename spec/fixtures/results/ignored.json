@@ -1,5 +1,5 @@
 [{
-  "filePath": "/Users/01011775/Work/danger-eslint/spec/fixtures/javascript/ignored.js",
+  "filePath": "danger-eslint/spec/fixtures/javascript/ignored.js",
   "messages": [{
     "fatal": false,
     "severity": 1,

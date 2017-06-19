@@ -51,6 +51,13 @@ module Danger
             .with(anything, /empty.js/).and_return(@empty_result)
           allow(@eslint).to receive(:run_lint)
             .with(anything, /ignored.js/).and_return(@ignored_result)
+          allow(@eslint).to receive(:run_lint).with(anything, '.').and_return(
+            [
+              @empty_result.first,
+              @error_result.first,
+              @warning_result.first
+            ]
+          )
         end
 
         it 'lint all js files when filtering not set' do
@@ -97,8 +104,13 @@ module Danger
         end
 
         it 'accept config file' do
-          allow(@eslint).to receive(:run_lint)
-            .with(anything, /warning.js/).and_return(@alter_warning_result)
+          allow(@eslint).to receive(:run_lint).with(anything, '.').and_return(
+            [
+              @empty_result.first,
+              @error_result.first,
+              @alter_warning_result.first
+            ]
+          )
 
           @eslint.config_file = 'spec/fixtures/config/.eslintrc.json'
           @eslint.lint
@@ -107,9 +119,14 @@ module Danger
         end
 
         it 'accept ignore file' do
-          allow(@eslint).to receive(:run_lint)
-            .with(anything, /ignored.js/).and_return(@alter_ignored_result)
-
+          allow(@eslint).to receive(:run_lint).with(anything, '.').and_return(
+            [
+              @empty_result.first,
+              @error_result.first,
+              @warning_result.first,
+              @alter_ignored_result.first
+            ]
+          )
           @eslint.ignore_file = 'spec/fixtures/config/.eslintignore'
           @eslint.lint
           expect(@eslint.status_report[:errors].length).to be(1)

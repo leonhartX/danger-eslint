@@ -1,4 +1,5 @@
 require 'mkmf'
+require 'json'
 
 module Danger
   # This is your plugin class. Any attributes or methods you expose here will
@@ -41,11 +42,15 @@ module Danger
     def lint
       bin = eslint_path
       raise 'eslint is not installed' unless bin
-      files = filtering ? (git.modified_files - git.deleted_files) + git.added_files : Dir.glob('**/*')
-      files
-        .select { |f| f.end_with? '.js' }
-        .map { |f| f.gsub("#{Dir.pwd}/", '') }
-        .map { |f| run_lint(bin, f).first }
+      if filtering
+        results = ((git.modified_files - git.deleted_files) + git.added_files)
+                  .select { |f| f.end_with? '.js' }
+                  .map { |f| f.gsub("#{Dir.pwd}/", '') }
+                  .map { |f| run_lint(bin, f).first }
+      else
+        results = run_lint(bin, '.')
+      end
+      results
         .reject { |r| r['messages'].length.zero? }
         .reject { |r| r['messages'].first['message'].include? 'matching ignore pattern' }
         .map { |r| send_comment r }
