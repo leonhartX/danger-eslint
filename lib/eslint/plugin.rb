@@ -5,9 +5,8 @@ module Danger
   # Lint javascript files using [eslint](http://eslint.org/).
   # Results are send as inline commen.
   #
-  # @example Specifying custom config file.
-  #
-  #          # Run eslint with changed files
+  # @example Run eslint with changed files only
+  #          
   #          eslint.filtering = true
   #          eslint.lint
   #
