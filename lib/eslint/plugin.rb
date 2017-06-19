@@ -6,7 +6,7 @@ module Danger
   # Results are send as inline commen.
   #
   # @example Run eslint with changed files only
-  #          
+  #
   #          eslint.filtering = true
   #          eslint.lint
   #
