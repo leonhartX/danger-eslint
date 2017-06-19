@@ -2,23 +2,17 @@ require 'mkmf'
 require 'json'
 
 module Danger
-  # This is your plugin class. Any attributes or methods you expose here will
-  # be available from within your Dangerfile.
+  # Lint javascript files using [eslint](http://eslint.org/).
+  # Results are send as inline commen.
   #
-  # To be published on the Danger plugins site, you will need to have
-  # the public interface documented. Danger uses [YARD](http://yardoc.org/)
-  # for generating documentation from your plugin source, and you can verify
-  # by running `danger plugins lint` or `bundle exec rake spec`.
+  # @example Specifying custom config file.
   #
-  # You should replace these comments with a public description of your library.
-  #
-  # @example Ensure people are well warned about merging on Mondays
-  #
-  #          my_plugin.warn_on_mondays
+  #          # Run eslint with changed files
+  #          eslint.filtering = true
+  #          eslint.lint
   #
   # @see  leonhartX/danger-eslint
-  # @tags monday, weekends, time, rattata
-  #
+  # @tags lint, javaxctipt
   class DangerEslint < Plugin
     # An path to eslint's config file
     # @return [String]
@@ -40,17 +34,7 @@ module Danger
     # @return  [void]
     #
     def lint
-      bin = eslint_path
-      raise 'eslint is not installed' unless bin
-      if filtering
-        results = ((git.modified_files - git.deleted_files) + git.added_files)
-                  .select { |f| f.end_with? '.js' }
-                  .map { |f| f.gsub("#{Dir.pwd}/", '') }
-                  .map { |f| run_lint(bin, f).first }
-      else
-        results = run_lint(bin, '.')
-      end
-      results
+      lint_results
         .reject { |r| r['messages'].length.zero? }
         .reject { |r| r['messages'].first['message'].include? 'matching ignore pattern' }
         .map { |r| send_comment r }
@@ -64,6 +48,19 @@ module Danger
     def eslint_path
       local = './node_modules/.bin/eslint'
       File.exist?(local) ? local : find_executable('eslint')
+    end
+
+    # Get lint result regards the filtering option
+    #
+    # return [Hash]
+    def lint_results
+      bin = eslint_path
+      raise 'eslint is not installed' unless bin
+      return run_lint(bin, '.') unless filtering
+      ((git.modified_files - git.deleted_files) + git.added_files)
+        .select { |f| f.end_with? '.js' }
+        .map { |f| f.gsub("#{Dir.pwd}/", '') }
+        .map { |f| run_lint(bin, f).first }
     end
 
     # Run eslint aginst a single file.
