@@ -22,7 +22,7 @@ All lint result will send as individual comment. If your are using Github, the c
 Also, you can pass a config file or eslintignore file to danger-eslint with:
 
     eslint.config_file = /path/yourconfig
-    esling.ignore_file = /path/yourigonre
+    eslint.ignore_file = /path/yourigonre
     eslint.lint
     
 If you want to lint only new/modified files. You can achieve that with setting the `filtering` parameter to `true`.
