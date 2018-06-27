@@ -34,7 +34,7 @@ module Danger
     #
     def lint
       lint_results
-        .reject { |r| r['messages'].length.zero? }
+        .reject { |r| r.nil? || r['messages'].length.zero? }
         .reject { |r| r['messages'].first['message'].include? 'matching ignore pattern' }
         .map { |r| send_comment r }
     end
