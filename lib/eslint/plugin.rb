@@ -26,6 +26,14 @@ module Danger
     # @return [Boolean]
     attr_accessor :filtering
 
+    # Specified extentions of target file
+    # Default is [".js"]
+    # @return [Array]
+    attr_writer :target_extensions
+    def target_extensions
+      @target_extensions ||= %W(.js)
+    end
+
     # Lints javascript files.
     # Generates `errors` and `warnings` due to eslint's config.
     # Will try to send inline comment if supported(Github)
@@ -57,7 +65,7 @@ module Danger
       raise 'eslint is not installed' unless bin
       return run_lint(bin, '.') unless filtering
       ((git.modified_files - git.deleted_files) + git.added_files)
-        .select { |f| f.end_with? '.js' }
+        .select { |f| target_extensions.include?(File.extname(f)) }
         .map { |f| f.gsub("#{Dir.pwd}/", '') }
         .map { |f| run_lint(bin, f).first }
     end

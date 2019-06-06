@@ -81,6 +81,27 @@ module Danger
           expect(@eslint.status_report[:warnings].length).to be(0)
         end
 
+        it 'lint files with specified extention by target_extensions' do
+          allow(@eslint).to receive(:run_lint)
+            .with(anything, /error.[js|es6]/).and_return(@error_result)
+          allow(@eslint.git).to receive(:modified_files)
+            .and_return([
+              'spec/fixtures/javascript/error.es6',
+              'spec/fixtures/javascript/error.js'
+            ])
+
+          @eslint.target_extensions += %W(.es6)
+          @eslint.filtering = true
+          @eslint.lint
+
+          errors = @eslint.status_report[:errors]
+          expect(errors.length).to be(2)
+          errors.each do |error|
+            expect(error).to eq('Parsing error: Unexpected token ;')
+          end
+          expect(@eslint.status_report[:warnings].length).to be(0)
+        end
+
         it 'do not print anything if no violations' do
           allow(@eslint.git).to receive(:modified_files)
             .and_return(['spec/fixtures/javascript/empty.js'])
