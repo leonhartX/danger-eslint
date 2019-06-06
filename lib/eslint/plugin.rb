@@ -13,6 +13,8 @@ module Danger
   # @see  leonhartX/danger-eslint
   # @tags lint, javaxctipt
   class DangerEslint < Plugin
+    DEFAULT_BIN_PATH = './node_modules/.bin/eslint'
+
     # An path to eslint's config file
     # @return [String]
     attr_accessor :config_file
@@ -25,6 +27,12 @@ module Danger
     # Only show messages within changed files.
     # @return [Boolean]
     attr_accessor :filtering
+
+    # A path of eslint's bin
+    attr_writer :bin_path
+    def bin_path
+      @bin_path ||= DEFAULT_BIN_PATH
+    end
 
     # Specified extentions of target file
     # Default is [".js"]
@@ -53,8 +61,7 @@ module Danger
     #
     # return [String]
     def eslint_path
-      local = './node_modules/.bin/eslint'
-      File.exist?(local) ? local : find_executable('eslint')
+      File.exist?(bin_path) ? bin_path : find_executable('eslint')
     end
 
     # Get lint result regards the filtering option
