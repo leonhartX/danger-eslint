@@ -13,6 +13,8 @@ module Danger
   # @see  leonhartX/danger-eslint
   # @tags lint, javaxctipt
   class DangerEslint < Plugin
+    DEFAULT_BIN_PATH = './node_modules/.bin/eslint'
+
     # An path to eslint's config file
     # @return [String]
     attr_accessor :config_file
@@ -25,6 +27,20 @@ module Danger
     # Only show messages within changed files.
     # @return [Boolean]
     attr_accessor :filtering
+
+    # A path of eslint's bin
+    attr_writer :bin_path
+    def bin_path
+      @bin_path ||= DEFAULT_BIN_PATH
+    end
+
+    # Specified extentions of target file
+    # Default is [".js"]
+    # @return [Array]
+    attr_writer :target_extensions
+    def target_extensions
+      @target_extensions ||= %W(.js)
+    end
 
     # Lints javascript files.
     # Generates `errors` and `warnings` due to eslint's config.
@@ -45,8 +61,7 @@ module Danger
     #
     # return [String]
     def eslint_path
-      local = './node_modules/.bin/eslint'
-      File.exist?(local) ? local : find_executable('eslint')
+      File.exist?(bin_path) ? bin_path : find_executable('eslint')
     end
 
     # Get lint result regards the filtering option
@@ -57,7 +72,7 @@ module Danger
       raise 'eslint is not installed' unless bin
       return run_lint(bin, '.') unless filtering
       ((git.modified_files - git.deleted_files) + git.added_files)
-        .select { |f| f.end_with? '.js' }
+        .select { |f| target_extensions.include?(File.extname(f)) }
         .map { |f| f.gsub("#{Dir.pwd}/", '') }
         .map { |f| run_lint(bin, f).first }
     end

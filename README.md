@@ -30,6 +30,18 @@ If you want to lint only new/modified files. You can achieve that with setting t
     eslint.filtering = true
     eslint.lint
 
+If you want to lint files with specified extension, you can set extensions to the `target_extensions` parameter.  
+The default value is `['.js']`. In the case of the example below, the value will be `['.js', '.es6']`.
+
+    eslint.target_extensions += %W(.es6)
+    eslint.lint
+
+If you want to specify eslint's bin file, you can set a bin path to the `bin_path` parameter.
+
+    eslint.bin_path = "/hoge/node_modules/.bin/eslint"
+    eslint.lint
+
+
 ## Development
 
 1. Clone this repo
