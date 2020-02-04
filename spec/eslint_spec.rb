@@ -16,7 +16,8 @@ module Danger
         allow(@eslint.git).to receive(:deleted_files).and_return([])
         allow(@eslint.git).to receive(:added_files).and_return([])
         allow(@eslint.git).to receive(:modified_files).and_return([])
-        stub_const("Danger::DangerEslint::DEFAULT_BIN_PATH", 'spec/fixtures/bin/dummy_eslint')
+        allow(@eslint.git).to receive(:renamed_files).and_return([])
+        stub_const('Danger::DangerEslint::DEFAULT_BIN_PATH', 'spec/fixtures/bin/dummy_eslint')
       end
 
       it 'does not make an empty message' do
@@ -70,15 +71,33 @@ module Danger
           expect(@eslint.status_report[:warnings].length).to be(1)
         end
 
-        it 'lint only changed files when filtering enabled' do
-          allow(@eslint.git).to receive(:modified_files)
-            .and_return(['spec/fixtures/javascript/error.js'])
+        context 'when filtering is enabled' do
+          it 'lint only changed files' do
+            allow(@eslint.git).to receive(:modified_files)
+              .and_return(['spec/fixtures/javascript/error.js'])
 
-          @eslint.filtering = true
-          @eslint.lint
-          error = @eslint.status_report[:errors].first
-          expect(error).to eq('Parsing error: Unexpected token ;')
-          expect(@eslint.status_report[:warnings].length).to be(0)
+            @eslint.filtering = true
+            @eslint.lint
+            error = @eslint.status_report[:errors].first
+            expect(error).to eq('Parsing error: Unexpected token ;')
+            expect(@eslint.status_report[:warnings].length).to be(0)
+          end
+
+          it 'ignores the old renamed file paths' do
+            allow(@eslint.git).to receive(:modified_files)
+              .and_return(['spec/somewhere/javascript.error.js'])
+            allow(@eslint.git).to receive(:renamed_files)
+              .and_return([
+                            { before: 'spec/somehwere/javascript/error.js',
+                              after: 'spec/fixtures/javascript/error.js' }
+                          ])
+
+            @eslint.filtering = true
+            @eslint.lint
+            error = @eslint.status_report[:errors].first
+            expect(error).to eq('Parsing error: Unexpected token ;')
+            expect(@eslint.status_report[:warnings].length).to be(0)
+          end
         end
 
         it 'lint files with specified extention by target_extensions' do
