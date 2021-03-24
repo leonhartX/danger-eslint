@@ -71,7 +71,7 @@ module Danger
       bin = eslint_path
       raise 'eslint is not installed' unless bin
       return run_lint(bin, '.') unless filtering
-      ((git.modified_files - git.deleted_files) + git.added_files)
+      ((git.modified_files - git.deleted_files - git.renamed_files.map { |r| r[:before] }) + git.added_files + git.renamed_files.map { |r| r[:after] })
         .select { |f| target_extensions.include?(File.extname(f)) }
         .map { |f| f.gsub("#{Dir.pwd}/", '') }
         .map { |f| run_lint(bin, f).first }
